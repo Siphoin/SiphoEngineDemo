@@ -21,7 +21,6 @@ namespace SiphoEngineDemo
             {
                 Player = this;
             }
-            Debug.WriteLine(Speed);
         }
 
         public void Update()
