@@ -38,6 +38,7 @@ namespace SiphoEngineDemo
             zombiePrefab.AddComponent<SpriteRenderer>();
             zombiePrefab.AddComponent<BoxCollider>();
             zombiePrefab.AddComponent<Rigidbody>();
+            zombiePrefab.AddComponent<ZombieController>();
             Prefab.CreatePrefab("Player", playerPrefab);
             Prefab.CreatePrefab("Zombie", zombiePrefab);
         }
@@ -57,14 +58,14 @@ namespace SiphoEngineDemo
 
         private static void SpawnZombie(object sender, ElapsedEventArgs e)
         {
-            
-                var zombie = Prefab.Instantiate("Zombie");
+            var player = PlayerController.Player;
 
                 // Устанавливаем случайную позицию вокруг игрока
-                var player = PlayerController.Player;
-                if (player != null)
+                
+                if (player.Transform != null)
                 {
-                    float angle = (float)(_random.NextDouble() * Math.PI * 2);
+                var zombie = Prefab.Instantiate("Zombie");
+                float angle = (float)(_random.NextDouble() * Math.PI * 2);
                     float distance = 300 + _random.Next(200); // 300-500 единиц от игрока
 
                     zombie.Transform.Position = new Vector2f(

@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿
 using SFML.System;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Debugging;
+using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.MathExtensions;
 using Time = SiphoEngine.Core.Time;
@@ -10,6 +12,7 @@ namespace SiphoEngineDemo
     public class PlayerController : Component, IUpdatable, IAwakable, IPlayerController
     {
         public float Speed = 500f;
+        private Collider? _collider;
 
         public static IPlayerController Player {  get; private set; }
 
@@ -20,6 +23,25 @@ namespace SiphoEngineDemo
             if (Player == null)
             {
                 Player = this;
+            }
+
+            _collider = GetComponent<Collider>();
+
+            _collider.OnCollisionEvent += HandleCollision;
+        }
+
+        private void HandleCollision(CollisionEventData data)
+        {
+            switch (data.EventType)
+            {
+                case CollisionEventType.Enter:
+                   Debug.Log("Collision Enter with " + data.Other.GameObject.Name);
+                    break;
+                case CollisionEventType.Stay:
+                    break;
+                case CollisionEventType.Exit:
+                   Debug.Log("Collision Exit with " + data.Other.GameObject.Name);
+                    break;
             }
         }
 
@@ -36,6 +58,12 @@ namespace SiphoEngineDemo
 
             if (!direction.IsZero())
                 Transform.Position += direction.Normalized() * Speed * Time.DeltaTime;
+        }
+
+        public override void Destroy()
+        {
+            _collider.OnCollisionEvent -= HandleCollision;
+            base.Destroy();
         }
     }
 }
