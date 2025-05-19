@@ -9,6 +9,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SiphoEngine\SiphoEngine.csproj" />
+	  <Content Include="..\SiphoEngineDebugConsole\bin\$(Configuration)\$(TargetFramework)\SiphoEngineDebugConsole.exe">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <Visible>false</Visible>
+	  </Content>
   </ItemGroup>
-
+	<Target Name="CopyDebugConsole" AfterTargets="Build">
+		<Exec Command="xcopy /Y /R &quot;$(ProjectDir)..\SiphoEngineDebugConsole\bin\$(Configuration)\$(TargetFramework)\SiphoEngineDebugConsole.*&quot; &quot;$(TargetDir)&quot;" />
+	</Target>
 </Project>

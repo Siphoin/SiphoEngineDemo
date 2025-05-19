@@ -46,7 +46,7 @@ namespace SiphoEngineDemo
             GameEngine.AddScene(testScene);
             _currentScene = testScene;
 
-            var player1 = Prefab.Instantiate("Player", "Player1");
+            var player1 = Prefab.Instantiate("Player");
 
             // Настройка таймера для спавна зомби
             _zombieSpawnTimer = new Timer(2000); // Спавн каждые 2 секунды
