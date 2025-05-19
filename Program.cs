@@ -1,11 +1,10 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 using SFML.System;
 using SiphoEngine;
 using SiphoEngine.Components;
 using SiphoEngine.Core;
-using SiphoEngine.Core.Components.Render;
 using SiphoEngine.Core.SiphoEngine;
+using SiphoEngine.Physics;
 using Timer = System.Timers.Timer;
 
 namespace SiphoEngineDemo
@@ -14,7 +13,6 @@ namespace SiphoEngineDemo
     {
         private static Timer _zombieSpawnTimer;
         private static Random _random = new Random();
-        private static Scene _currentScene;
 
         static void Main(string[] args)
         {
@@ -31,11 +29,13 @@ namespace SiphoEngineDemo
             var playerPrefab = new GameObject("PlayerPrefab");
             playerPrefab.AddComponent<SpriteRenderer>();
             playerPrefab.AddComponent<PlayerController>();
+            var boxCollider = playerPrefab.AddComponent<BoxCollider>();
+            var physicsBody = playerPrefab.AddComponent<Rigidbody>();
 
             GameObject zombiePrefab = new GameObject("Zombie");
             zombiePrefab.AddComponent<SpriteRenderer>();
-            zombiePrefab.AddComponent<ZombieController>();
-
+            zombiePrefab.AddComponent<BoxCollider>();
+            zombiePrefab.AddComponent<Rigidbody>();
             Prefab.CreatePrefab("Player", playerPrefab);
             Prefab.CreatePrefab("Zombie", zombiePrefab);
         }
@@ -44,12 +44,10 @@ namespace SiphoEngineDemo
         {
             TestScene testScene = new TestScene();
             GameEngine.AddScene(testScene);
-            _currentScene = testScene;
 
-            var player1 = Prefab.Instantiate("Player");
+            Prefab.Instantiate("Player");
 
-            // Настройка таймера для спавна зомби
-            _zombieSpawnTimer = new Timer(2000); // Спавн каждые 2 секунды
+            _zombieSpawnTimer = new Timer(2000);
             _zombieSpawnTimer.Elapsed += SpawnZombie;
             _zombieSpawnTimer.AutoReset = true;
             _zombieSpawnTimer.Start();
