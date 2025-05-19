@@ -3,6 +3,7 @@ using SFML.System;
 using SiphoEngine;
 using SiphoEngine.Components;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.SiphoEngine;
 using SiphoEngine.Physics;
 using Timer = System.Timers.Timer;
@@ -16,6 +17,7 @@ namespace SiphoEngineDemo
 
         static void Main(string[] args)
         {
+            PhysicsEngine.EnableGravity = false;
             GameEngine.OnLoadingPrefabs += OnLoadingPrefabs;
             Game game = new();
             game.OnRunning += Test;
