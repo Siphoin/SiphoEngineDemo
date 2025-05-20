@@ -3,30 +3,34 @@ using SFML.System;
 using SiphoEngine;
 using SiphoEngine.Components;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Coroutines;
+using SiphoEngine.Core.Coroutines.Yeilds;
+using SiphoEngine.Core.Debugging;
 using SiphoEngine.Core.Physics;
 using SiphoEngine.Core.SiphoEngine;
 using SiphoEngine.Physics;
+using Time = SiphoEngine.Core.Time;
 using Timer = System.Timers.Timer;
 
 namespace SiphoEngineDemo
 {
     internal class Program
     {
-        private static Timer _zombieSpawnTimer;
         private static Random _random = new Random();
 
         static void Main(string[] args)
         {
             PhysicsEngine.EnableGravity = false;
-            GameEngine.OnLoadingPrefabs += OnLoadingPrefabs;
             Game game = new();
             game.OnRunning += Test;
             game.Run();
         }
 
-        private static void OnLoadingPrefabs()
+
+        private static void Test()
         {
-            GameEngine.OnLoadingPrefabs -= OnLoadingPrefabs;
+            TestScene testScene = new TestScene();
+            GameEngine.AddScene(testScene);
 
             var playerPrefab = new GameObject("PlayerPrefab");
             playerPrefab.AddComponent<SpriteRenderer>();
@@ -34,29 +38,13 @@ namespace SiphoEngineDemo
             var boxCollider = playerPrefab.AddComponent<BoxCollider>();
             var physicsBody = playerPrefab.AddComponent<Rigidbody>();
 
-            GameObject zombiePrefab = new GameObject("Zombie");
-            zombiePrefab.AddComponent<SpriteRenderer>();
-            zombiePrefab.AddComponent<BoxCollider>();
-            zombiePrefab.AddComponent<Rigidbody>();
-            zombiePrefab.AddComponent<ZombieController>();
-            Prefab.CreatePrefab("Player", playerPrefab);
-            Prefab.CreatePrefab("Zombie", zombiePrefab);
+
+            GameEngine.ActiveScene.AddGameObject(playerPrefab);
+
+
         }
 
-        private static void Test()
-        {
-            TestScene testScene = new TestScene();
-            GameEngine.AddScene(testScene);
-
-            Prefab.Instantiate("Player");
-
-            _zombieSpawnTimer = new Timer(2000);
-            _zombieSpawnTimer.Elapsed += SpawnZombie;
-            _zombieSpawnTimer.AutoReset = true;
-            _zombieSpawnTimer.Start();
-        }
-
-        private static void SpawnZombie(object sender, ElapsedEventArgs e)
+        private static void SpawnZombie()
         {
             var player = PlayerController.Player;
 
@@ -76,6 +64,7 @@ namespace SiphoEngineDemo
 
 
             }
+
         }
     }
 
