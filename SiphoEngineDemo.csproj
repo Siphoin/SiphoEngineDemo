@@ -15,9 +15,18 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Content\Fonts\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Content\Fonts\Roboto-Regular.ttf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<Target Name="BuildDebugConsole" BeforeTargets="CopyDebugConsole" Condition="'$(Configuration)' == 'Debug'">
-		<MSBuild Projects="..\SiphoEngineDebugConsole\SiphoEngineDebugConsole.csproj"
-				 Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+		<MSBuild Projects="..\SiphoEngineDebugConsole\SiphoEngineDebugConsole.csproj" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
 	</Target>
 
 	<Target Name="CopyDebugConsole" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">

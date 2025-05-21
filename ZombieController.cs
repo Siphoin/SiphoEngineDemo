@@ -1,12 +1,14 @@
 ﻿using SFML.System;
 using SiphoEngine.Core;
+using SiphoEngine.Core.Coroutines;
+using SiphoEngine.Core.Coroutines.Yeilds;
 using SiphoEngine.Core.PlayerLoop;
 using SiphoEngine.MathExtensions;
 using Time = SiphoEngine.Core.Time;
 
 namespace SiphoEngineDemo
 {
-    public class ZombieController : Component, IUpdatable
+    public class ZombieController : Component, IUpdatable, IStartable
     {
         public float Speed { get; set; } = 300f; 
         public float DetectionRadius { get; set; } = 500f;
@@ -34,6 +36,17 @@ namespace SiphoEngineDemo
                 direction = direction.Normalized();
                 Transform.Position += direction * Speed * Time.DeltaTime;
             }
+        }
+
+        public void Start()
+        {
+            StartCoroutine(DestroyTime());
+        }
+
+        private IEnumerator<ICoroutineYield> DestroyTime()
+        {
+            yield return new WaitForSeconds(3);
+            Destroy();
         }
     }
 }
